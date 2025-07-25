@@ -186,6 +186,7 @@ export function ImageLoader({
   objectFit = "cover",
   customColors,
   seed,
+  ...props
 }: ImageLoaderProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -292,6 +293,7 @@ export function ImageLoader({
           style={{ objectFit }}
           loading={loading}
           decoding="async"
+          {...props}
         />
       )}
 

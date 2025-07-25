@@ -1,4 +1,3 @@
-import { ThemeToggle } from "@/components/theme/toggle";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,9 +12,6 @@ import { Input } from "@/components/ui/input";
 export default function Home() {
   return (
     <main>
-      <div className="absolute top-0 right-0 p-4 z-50">
-        <ThemeToggle />
-      </div>
       <div className="container grid auto-rows-min gap-2 place-content-center h-screen">
         <h1 className="text-center">Next.js 15 Base Template</h1>
         <p className="text-center">

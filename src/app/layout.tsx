@@ -1,6 +1,9 @@
 import { AppContext } from "@/components/context";
+import ScrollUp from "@/components/elements/scroll-up";
+import { Footer } from "@/components/layout/footer";
+import { Header } from "@/components/layout/header";
 import { meta } from "@/lib/config";
-import { days_one, questrial, space_mono } from "@/lib/fonts";
+import { mona_sans, pathway_extreme, space_mono } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
@@ -20,8 +23,14 @@ export const viewport: Viewport = {
   viewportFit: "cover",
   width: "device-width",
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: `${meta.colors.dark}` },
-    { media: "(prefers-color-scheme: light)", color: `${meta.colors.light}` },
+    {
+      media: "(prefers-color-scheme: dark)",
+      color: `${meta.colors?.dark}` || "#09090b",
+    },
+    {
+      media: "(prefers-color-scheme: light)",
+      color: `${meta.colors?.light}` || "#ffffff",
+    },
   ],
 };
 
@@ -34,13 +43,18 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          days_one.variable,
-          questrial.variable,
+          pathway_extreme.variable,
+          mona_sans.variable,
           space_mono.variable,
           "antialiased"
         )}
       >
-        <AppContext>{children}</AppContext>
+        <AppContext>
+          <Header />
+          {children}
+          <ScrollUp />
+          <Footer />
+        </AppContext>
       </body>
     </html>
   );

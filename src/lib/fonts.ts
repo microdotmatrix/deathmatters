@@ -1,14 +1,12 @@
-import { Days_One, Questrial, Space_Mono } from "next/font/google";
+import { Mona_Sans, Pathway_Extreme, Space_Mono } from "next/font/google";
 
-export const days_one = Days_One({
+export const pathway_extreme = Pathway_Extreme({
   subsets: ["latin"],
-  weight: ["400"],
   variable: "--display-family",
 });
 
-export const questrial = Questrial({
+export const mona_sans = Mona_Sans({
   subsets: ["latin"],
-  weight: ["400"],
   variable: "--text-family",
 });
 
