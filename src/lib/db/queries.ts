@@ -3,7 +3,17 @@ import { eq } from "drizzle-orm";
 import { cache } from "react";
 import { getSession } from "../auth/server";
 import { db } from "../db";
-import { deceased, savedQuotes, userUpload } from "./schema";
+import {
+  deceased,
+  obituaries,
+  obituariesDraft,
+  Obituary,
+  ObituaryDraft,
+  savedQuotes,
+  userUpload,
+  userGeneratedImage,
+  UserGeneratedImage,
+} from "./schema";
 
 export const getCreatorEntries = cache(async () => {
   const session = await getSession();
@@ -95,3 +105,122 @@ export const getUserSavedQuotes: () => Promise<{
     return { quotes: [], savedQuotesMap: new Map() };
   }
 };
+
+export const getUserObituaries: () => Promise<Obituary[]> = async () => {
+  const session = await getSession();
+
+  if (!session || !session.user) {
+    return [];
+  }
+
+  try {
+    const userId = session.user.id;
+
+    const result = await db.query.obituaries.findMany({
+      where: eq(obituaries.userId, userId),
+      orderBy: (obituaries, { desc }) => [desc(obituaries.createdAt)],
+    });
+
+    return result;
+  } catch (error) {
+    console.error("Error fetching obituaries:", error);
+    return [];
+  }
+};
+
+export const getUserObituariesDraft: () => Promise<
+  ObituaryDraft[]
+> = async () => {
+  const session = await getSession();
+
+  if (!session || !session.user) {
+    return [];
+  }
+
+  try {
+    const userId = session.user.id;
+
+    const result = await db.query.obituariesDraft.findMany({
+      where: eq(obituariesDraft.userId, userId),
+      orderBy: (obituariesDraft, { desc }) => [desc(obituariesDraft.updatedAt)],
+    });
+
+    return result;
+  } catch (error) {
+    console.error("Error fetching obituaries:", error);
+    return [];
+  }
+};
+
+export const getUserObituary = async (id: string) => {
+  const session = await getSession();
+
+  if (!session || !session.user) {
+    return null;
+  }
+
+  try {
+    const userId = session.user.id;
+
+    const result = await db.query.obituaries.findFirst({
+      where: (obituaries, { eq, and }) =>
+        and(
+          eq(obituaries.id, id),
+          eq(obituaries.userId, userId)
+        ),
+    });
+
+    return result;
+  } catch (error) {
+    console.error("Error fetching obituary:", error);
+    return null;
+  }
+};
+
+export const getObituariesByDeceasedId = cache(async (deceasedId: string) => {
+  const session = await getSession();
+
+  if (!session?.user) {
+    return [];
+  }
+
+  try {
+    const result = await db.query.obituaries.findMany({
+      where: (obituaries, { eq, and }) =>
+        and(
+          eq(obituaries.deceasedId, deceasedId),
+          eq(obituaries.userId, session.user.id)
+        ),
+      orderBy: (obituaries, { desc }) => [desc(obituaries.createdAt)],
+    });
+
+    return result;
+  } catch (error) {
+    console.error("Error fetching obituaries by deceased ID:", error);
+    return [];
+  }
+});
+
+export const getGeneratedImagesByDeceasedId = cache(async (deceasedId: string) => {
+  const session = await getSession();
+
+  if (!session?.user) {
+    return [];
+  }
+
+  try {
+    const result = await db.query.userGeneratedImage.findMany({
+      where: (userGeneratedImage, { eq, and }) =>
+        and(
+          eq(userGeneratedImage.deceasedId, deceasedId),
+          eq(userGeneratedImage.userId, session.user.id)
+        ),
+      orderBy: (userGeneratedImage, { desc }) => [desc(userGeneratedImage.createdAt)],
+    });
+
+    return result;
+  } catch (error) {
+    console.error("Error fetching generated images by deceased ID:", error);
+    return [];
+  }
+});

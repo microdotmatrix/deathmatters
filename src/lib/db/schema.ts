@@ -2,6 +2,7 @@ import {
   boolean,
   integer,
   json,
+  jsonb,
   pgTable,
   text,
   timestamp,
@@ -166,6 +167,103 @@ export const savedQuotes = pgTable("saved_quotes", {
     .notNull(),
 });
 
+export const obituaries = pgTable("obituaries", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  fullName: text("full_name").notNull(),
+  birthDate: text("birth_date").notNull(), // Store as text 'YYYY-MM-DD'
+  deathDate: text("death_date").notNull(), // Store as text 'YYYY-MM-DD'
+  // Storing input data as JSONB is flexible. Consider a more granular schema
+  // if you need to query specific input fields frequently.
+  inputData: jsonb("input_data"), // Store the raw form input as JSONB
+  generatedText: text("generated_text").notNull(),
+  generatedTextClaude: text("generated_text_claude").notNull(),
+  generatedTextOpenAI: text("generated_text_openai").notNull(),
+  generatedTextClaudeTokens: integer("generated_text_claude_tokens").notNull(),
+  generatedTextOpenAITokens: integer("generated_text_openai_tokens").notNull(),
+  // Foreign key to relate obituary to deceased person
+  deceasedId: uuid("deceased_id")
+    .notNull()
+    .references(() => deceased.id, { onDelete: "cascade" }),
+  // Add more fields if needed, e.g., userId for associating with a user account
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at")
+    .$defaultFn(() => new Date())
+    .notNull(),
+  updatedAt: timestamp("updated_at")
+    .$defaultFn(() => new Date())
+    .notNull(),
+});
+
+// Define the structure of obituary input data
+export interface ObituaryInputData {
+  fullName: string;
+  birthDate?: string;
+  deathDate?: string;
+  biographySummary?: string;
+  accomplishments?: string;
+  hobbiesInterests?: string;
+  survivedBy?: string;
+  predeceasedBy?: string;
+  serviceDetails?: string; // Stored as a string in the existing implementation
+  tone?: string;
+  // Additional fields that might be used in the form
+  age?: number;
+  location?: string;
+  occupation?: string;
+  achievements?: string;
+  hobbies?: string;
+  familyMembers?: {
+    id: string;
+    name: string;
+    relationship: string;
+    location?: string;
+  }[];
+}
+
+export const obituariesDraft = pgTable("obituaries_draft", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  // Storing input data as JSONB with a defined type
+  inputData: jsonb("input_data").$type<ObituaryInputData>(), // Typed as ObituaryInputData
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at")
+    .$defaultFn(() => new Date())
+    .notNull(),
+  updatedAt: timestamp("updated_at")
+    .$defaultFn(() => new Date())
+    .notNull(),
+});
+
+export const userGeneratedImage = pgTable("user_generated_image", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  epitaphId: integer("epitaph_id").notNull(), // ID from the Placid API
+  templateId: text("template_id"), // Template ID used for generation
+  imageUrl: text("image_url"), // URL to access the generated image (optional, can be populated later)
+  metadata: json("metadata"), // For storing additional metadata about the generation
+  status: text("status")
+    .$defaultFn(() => "generated")
+    .notNull(), // e.g., 'generated', 'processed', 'failed'
+  // Foreign key to relate obituary to deceased person
+  deceasedId: uuid("deceased_id")
+    .notNull()
+    .references(() => deceased.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at")
+    .$defaultFn(() => new Date())
+    .notNull(),
+  updatedAt: timestamp("updated_at")
+    .$defaultFn(() => new Date())
+    .notNull(),
+});
+
 export type Deceased = typeof deceased.$inferSelect;
 export type UserUpload = typeof userUpload.$inferSelect;
 export type SavedQuote = typeof savedQuotes.$inferSelect;
+export type Obituary = typeof obituaries.$inferSelect;
+export type ObituaryDraft = typeof obituariesDraft.$inferSelect;
+export type UserGeneratedImage = typeof userGeneratedImage.$inferSelect;

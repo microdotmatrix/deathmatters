@@ -5,7 +5,7 @@ import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { updateDeceased } from "@/lib/actions/user";
-import { getEntryById } from "@/lib/db/queries";
+import { getEntryById, getObituariesByDeceasedId, getGeneratedImagesByDeceasedId } from "@/lib/db/queries";
 import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,18 +24,24 @@ export default async function EntryEditPage({ params }: PageProps) {
     notFound();
   }
 
+  // Fetch obituaries for this deceased person
+  const obituaries = await getObituariesByDeceasedId(entryId);
+  
+  // Fetch generated images for this deceased person
+  const generatedImages = await getGeneratedImagesByDeceasedId(entryId);
+
   return (
     <main className="min-h-screen">
       <div className="container mx-auto px-4 py-6">
         <Suspense fallback="Loading...">
-          <EntryEditContent entry={entry} />
+          <EntryEditContent entry={entry} obituaries={obituaries} generatedImages={generatedImages} />
         </Suspense>
       </div>
     </main>
   );
 }
 
-const EntryEditContent = ({ entry }: { entry: any }) => {
+const EntryEditContent = ({ entry, obituaries, generatedImages }: { entry: any; obituaries: any[]; generatedImages: any[] }) => {
   const handleSubmit = async (formData: FormData) => {
     "use server";
     const result = await updateDeceased({}, formData);
@@ -167,18 +173,77 @@ const EntryEditContent = ({ entry }: { entry: any }) => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Icon icon="mdi:file-document-outline" className="w-5 h-5" />
-                Obituaries
+                Obituaries ({obituaries.length})
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <p className="text-sm text-muted-foreground">
-                  No obituaries generated yet.
-                </p>
-                <Button variant="outline" size="sm" className="w-full">
-                  <Icon icon="mdi:plus" className="w-4 h-4 mr-2" />
-                  Generate Obituary
-                </Button>
+                {obituaries.length > 0 ? (
+                  <>
+                    <div className="space-y-2 max-h-60 overflow-y-auto">
+                      {obituaries.map((obituary) => (
+                        <div
+                          key={obituary.id}
+                          className="p-3 border rounded-lg hover:bg-muted/50 transition-colors"
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-medium text-sm truncate">
+                                {obituary.fullName}
+                              </h4>
+                              <p className="text-xs text-muted-foreground">
+                                {format(new Date(obituary.createdAt), "MMM d, yyyy")}
+                              </p>
+                              <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                                {obituary.generatedText.substring(0, 100)}...
+                              </p>
+                            </div>
+                            <Link
+                              href={`/dashboard/${entry.id}/obituaries/${obituary.id}`}
+                              className={buttonVariants({
+                                variant: "ghost",
+                                size: "sm",
+                                className: "h-8 w-8 p-0 flex-shrink-0",
+                              })}
+                            >
+                              <Icon icon="mdi:eye" className="w-4 h-4" />
+                            </Link>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="border-t pt-3">
+                      <Link
+                        href={`/dashboard/${entry.id}/obituaries/new`}
+                        className={buttonVariants({
+                          variant: "outline",
+                          size: "sm",
+                          className: "w-full",
+                        })}
+                      >
+                        <Icon icon="mdi:plus" className="w-4 h-4 mr-2" />
+                        Generate New Obituary
+                      </Link>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-sm text-muted-foreground">
+                      No obituaries generated yet.
+                    </p>
+                    <Link
+                      href={`/dashboard/${entry.id}/obituaries/new`}
+                      className={buttonVariants({
+                        variant: "outline",
+                        size: "sm",
+                        className: "w-full",
+                      })}
+                    >
+                      <Icon icon="mdi:plus" className="w-4 h-4 mr-2" />
+                      Generate Obituary
+                    </Link>
+                  </>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -193,13 +258,76 @@ const EntryEditContent = ({ entry }: { entry: any }) => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <p className="text-sm text-muted-foreground">
-                  No memorial images created yet.
-                </p>
-                <Button variant="outline" size="sm" className="w-full">
-                  <Icon icon="mdi:plus" className="w-4 h-4 mr-2" />
-                  Create Memorial Image
-                </Button>
+                {generatedImages && generatedImages.length > 0 ? (
+                  <>
+                    <div className="space-y-2">
+                      {generatedImages.slice(0, 3).map((image) => (
+                        <div key={image.id} className="flex items-center justify-between p-2 border rounded-lg">
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 bg-gray-100 rounded-md flex items-center justify-center">
+                              <Icon icon="mdi:image" className="w-6 h-6 text-gray-400" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium">Memorial Image #{image.epitaphId}</p>
+                              <p className="text-xs text-muted-foreground">
+                                {format(new Date(image.createdAt), "MMM d, yyyy")}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">
+                            {image.status}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    {generatedImages.length > 3 && (
+                      <p className="text-xs text-muted-foreground text-center">
+                        +{generatedImages.length - 3} more images
+                      </p>
+                    )}
+                    <div className="flex gap-2">
+                      <Link
+                        href={`/dashboard/${entry.id}/images`}
+                        className={buttonVariants({
+                          variant: "outline",
+                          size: "sm",
+                          className: "flex-1",
+                        })}
+                      >
+                        <Icon icon="mdi:eye" className="w-4 h-4 mr-2" />
+                        View All
+                      </Link>
+                      <Link
+                        href={`/dashboard/${entry.id}/images/new`}
+                        className={buttonVariants({
+                          variant: "outline",
+                          size: "sm",
+                          className: "flex-1",
+                        })}
+                      >
+                        <Icon icon="mdi:plus" className="w-4 h-4 mr-2" />
+                        Create New
+                      </Link>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-sm text-muted-foreground">
+                      No memorial images created yet.
+                    </p>
+                    <Link
+                      href={`/dashboard/${entry.id}/images/new`}
+                      className={buttonVariants({
+                        variant: "outline",
+                        size: "sm",
+                        className: "w-full",
+                      })}
+                    >
+                      <Icon icon="mdi:plus" className="w-4 h-4 mr-2" />
+                      Create Memorial Image
+                    </Link>
+                  </>
+                )}
               </div>
             </CardContent>
           </Card>
