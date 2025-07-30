@@ -58,13 +58,14 @@ export default async function Create({
   };
 
   return (
-    <main className="flex flex-col lg:flex-row items-center lg:items-start relative">
+    <main className="flex flex-col lg:flex-row items-center lg:items-start relative pb-12 lg:pb-24">
       <aside className="flex-none lg:flex-1/3 sticky lg:top-32 mt-12 order-2 lg:order-1">
         <CreateImage
           action={createEpitaphsAction}
           userId={userId}
           deceased={deceased}
           quotes={quotes}
+          entryId={entryId}
         />
       </aside>
       <article className="flex-1 lg:flex-2/3 px-4 order-1 lg:order-2 flex">

@@ -29,11 +29,13 @@ export function CreateImage({
   userId,
   deceased,
   quotes,
+  entryId,
 }: {
   action: (formData: PlacidRequest, userId: string) => Promise<ActionState>;
   userId: string;
   deceased: Deceased;
   quotes: UnifiedQuote[];
+  entryId: string;
 }) {
   const [openQuotes, setOpenQuotes] = useState(false);
   const [formData, setFormData] = useState<PlacidRequest>({
@@ -231,13 +233,23 @@ export function CreateImage({
                 portrait: deceased.image,
               });
               setError(null);
-              router.replace("/memorials/create");
+              router.replace(`/dashboard/${deceased.id}/images/new`);
             }}
           >
             Reset
           </Button>
         </div>
         {error && <p className="text-destructive">{error}</p>}
+        {/* Back to Entry Button */}
+        <div className="mt-2">
+          <Link
+            href={`/dashboard/${entryId}`}
+            className={buttonVariants({ variant: "outline", size: "sm" })}
+          >
+            <Icon icon="mdi:arrow-left" className="w-4 h-4 mr-2" />
+            Back to Entry
+          </Link>
+        </div>
       </form>
     </div>
   );
