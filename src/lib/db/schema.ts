@@ -159,9 +159,6 @@ export const savedQuotes = pgTable("saved_quotes", {
     .references(() => user.id, { onDelete: "cascade" }),
   quote: text("quote").notNull(),
   author: text("author").notNull(),
-  deceasedId: uuid("deceased_id")
-    .notNull()
-    .references(() => deceased.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at")
     .$defaultFn(() => new Date())
     .notNull(),
@@ -232,9 +229,6 @@ export const obituariesDraft = pgTable("obituaries_draft", {
   userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-  deceasedId: uuid("deceased_id")
-    .notNull()
-    .references(() => deceased.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at")
     .$defaultFn(() => new Date())
     .notNull(),
