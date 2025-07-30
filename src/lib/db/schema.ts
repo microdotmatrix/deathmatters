@@ -159,6 +159,9 @@ export const savedQuotes = pgTable("saved_quotes", {
     .references(() => user.id, { onDelete: "cascade" }),
   quote: text("quote").notNull(),
   author: text("author").notNull(),
+  deceasedId: uuid("deceased_id")
+    .notNull()
+    .references(() => deceased.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at")
     .$defaultFn(() => new Date())
     .notNull(),
@@ -229,6 +232,9 @@ export const obituariesDraft = pgTable("obituaries_draft", {
   userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
+  deceasedId: uuid("deceased_id")
+    .notNull()
+    .references(() => deceased.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at")
     .$defaultFn(() => new Date())
     .notNull(),
@@ -261,6 +267,8 @@ export const userGeneratedImage = pgTable("user_generated_image", {
     .notNull(),
 });
 
+export type Session = typeof session.$inferSelect;
+export type User = typeof user.$inferSelect;
 export type Deceased = typeof deceased.$inferSelect;
 export type UserUpload = typeof userUpload.$inferSelect;
 export type SavedQuote = typeof savedQuotes.$inferSelect;

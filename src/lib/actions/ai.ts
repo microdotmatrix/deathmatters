@@ -23,9 +23,12 @@ interface ObituaryInput {
   tone?: string;
 }
 
+const systemPrompt =
+  "You are an compassionate and eloquent obituary writer. Your task is to write a respectful and heartfelt obituary based on the provided information.";
+
 function formatPrompt(inputData: ObituaryInput) {
   const prompt = `
-    You are an compassionate and eloquent obituary writer. Your task is to write a respectful and heartfelt obituary based on the provided information.
+    Write an obituary for the following person:
 
     Deceased Name: ${inputData.fullName}
     Born: ${inputData.birthDate}
@@ -93,7 +96,11 @@ async function createObituaryQuery(
   });
 }
 
-async function createObituaryRecord(userId: string, deceasedId: string, formData: FormData) {
+async function createObituaryRecord(
+  userId: string,
+  deceasedId: string,
+  formData: FormData
+) {
   const inputData: ObituaryInput = {
     fullName: formData.get("fullName") as string,
     birthDate: formData.get("birthDate") as string,
@@ -234,6 +241,7 @@ export async function generateClaudeObituary(
     (async () => {
       const { textStream } = await streamText({
         model: anthropic("claude-3-5-sonnet-latest"),
+        system: systemPrompt,
         messages: [{ role: "user", content: prompt }],
         temperature: 0.7,
         maxTokens: 1000,
@@ -303,6 +311,7 @@ export async function generateOpenAIObituary(
     (async () => {
       const { textStream } = await streamText({
         model: openai("gpt-4o"),
+        system: systemPrompt,
         messages: [{ role: "user", content: prompt }],
         temperature: 0.7,
         maxTokens: 1000,

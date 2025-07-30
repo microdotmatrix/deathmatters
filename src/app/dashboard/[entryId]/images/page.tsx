@@ -17,27 +17,31 @@ export default async function Memorials({ params }: PageProps) {
   return (
     <main className="flex flex-col justify-center px-2 lg:px-4 py-8">
       {session ? (
-        <>
-          <section className="flex flex-col lg:flex-row items-center gap-4">
-            <div className="flex-1 flex flex-col justify-center items-center space-y-6 py-24 lg:py-0">
-              <p>Welcome back, {session.user.name}</p>
-              <Link
-                href={`/dashboard/${entryId}/images/new`}
-                className={buttonVariants({
-                  variant: "default",
-                  size: "icon",
-                })}
-              >
-                <Icon icon="mdi:plus" />
-              </Link>
-            </div>
-            <div className="flex-2 w-full min-h-[calc(80vh-280px)] flex flex-col justify-center">
-              <ScrollArea className="h-full max-h-[calc(100vh-280px)] overflow-y-auto rounded-md border">
-                <UserEpitaphs deceasedId={entryId} />
-              </ScrollArea>
-            </div>
-          </section>
-        </>
+        <section className="flex flex-col lg:flex-row items-center gap-4">
+          <div className="flex-1 flex justify-center items-center gap-2 py-24 lg:py-0">
+            <Link
+              href={`/dashboard/${entryId}`}
+              className={buttonVariants({ variant: "outline", size: "lg" })}
+            >
+              <Icon icon="mdi:arrow-left" className="w-4 h-4 mr-2" />
+              Back to Entry
+            </Link>
+            <Link
+              href={`/dashboard/${entryId}/images/new`}
+              className={buttonVariants({
+                variant: "default",
+                size: "lg",
+              })}
+            >
+              <Icon icon="mdi:plus" /> Generate Memorials
+            </Link>
+          </div>
+          <div className="flex-2 w-full min-h-[calc(80vh-280px)] flex flex-col justify-center">
+            <ScrollArea className="h-full max-h-[calc(100vh-280px)] overflow-y-auto rounded-md border">
+              <UserEpitaphs deceasedId={entryId} />
+            </ScrollArea>
+          </div>
+        </section>
       ) : (
         <div className="flex flex-col gap-2 max-w-xl mx-auto py-12">
           <figure className="relative overflow-clip w-full aspect-square border border-border rounded-lg mb-8">

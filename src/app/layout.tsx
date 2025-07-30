@@ -2,6 +2,7 @@ import { AppContext } from "@/components/context";
 import ScrollUp from "@/components/elements/scroll-up";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
+import { getSession } from "@/lib/auth/server";
 import { meta } from "@/lib/config";
 import { mona_sans, pathway_extreme, space_mono } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
@@ -34,11 +35,12 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getSession();
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -50,7 +52,7 @@ export default function RootLayout({
         )}
       >
         <AppContext>
-          <Header />
+          <Header user={session?.user} />
           {children}
           <ScrollUp />
           <Footer />

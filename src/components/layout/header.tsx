@@ -7,9 +7,10 @@ import { motion, useScroll, useTransform } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "../theme/toggle";
+import { buttonVariants } from "../ui/button";
 import { Icon } from "../ui/icon";
 
-export const Header = () => {
+export const Header = ({ user }: { user: any }) => {
   const pathname = usePathname();
   const { scrollY } = useScroll();
   const isMobile = useIsMobile();
@@ -70,25 +71,35 @@ export const Header = () => {
           </Link>
         </nav>
         <div className="flex items-center gap-2 ml-2 lg:ml-4">
-          <div className="pl-2 relative">
-            <UserButton
-              size={isMobile ? "icon" : "default"}
-              align="center"
-              classNames={{
-                base: "rounded-md border border-input size-9 group relative",
-                trigger: {
-                  base: "bg-transparent text-foreground relative",
-                  avatar: {
-                    base: "rounded-md bg-background hover:bg-accent group-hover:bg-accent",
-                    fallback: "bg-background group-hover:bg-accent",
+          {user ? (
+            <div className="pl-2 relative">
+              <UserButton
+                size={isMobile ? "icon" : "default"}
+                align="center"
+                classNames={{
+                  base: "rounded-md border border-input size-9 group relative",
+                  trigger: {
+                    base: "bg-transparent text-foreground relative",
+                    avatar: {
+                      base: "rounded-md bg-background hover:bg-accent group-hover:bg-accent",
+                      fallback: "bg-background group-hover:bg-accent",
+                    },
                   },
-                },
-                content: {
-                  base: "relative",
-                },
-              }}
-            />
-          </div>
+                  content: {
+                    base: "relative",
+                  },
+                }}
+              />
+            </div>
+          ) : (
+            <Link
+              href="/auth/login"
+              className={buttonVariants({ variant: "ghost", size: "icon" })}
+            >
+              <Icon icon="ph:sign-in" className="size-6 md:size-8" />
+              <span className="sr-only">Login</span>
+            </Link>
+          )}
           <ThemeToggle />
         </div>
       </section>

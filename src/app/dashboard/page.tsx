@@ -1,10 +1,11 @@
+import { ActionButton } from "@/components/elements/action-button";
 import { CreatePortal } from "@/components/sections/dashboard/create";
 import { CreateForm } from "@/components/sections/dashboard/form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
 import { deleteDeceased } from "@/lib/actions/user";
-import { getCreatorEntries, getUserUploads } from "@/lib/db/queries";
+import { getCreatorEntries, getUserUploads, getObituariesByDeceasedId, getGeneratedImagesByDeceasedId } from "@/lib/db/queries";
 import type { Deceased } from "@/lib/db/schema";
 import { differenceInYears, format } from "date-fns";
 import Image from "next/image";
@@ -28,6 +29,19 @@ const PortalPageContent = async () => {
   const uploads = await getUserUploads();
   const hasEntries = entries.length > 0;
   const [featuredEntry, ...remainingEntries] = entries;
+
+  // Fetch stats for the featured entry if it exists
+  let featuredEntryStats = null;
+  if (featuredEntry) {
+    const [obituaries, generatedImages] = await Promise.all([
+      getObituariesByDeceasedId(featuredEntry.id),
+      getGeneratedImagesByDeceasedId(featuredEntry.id),
+    ]);
+    featuredEntryStats = {
+      obituariesCount: obituaries.length,
+      imagesCount: generatedImages.length,
+    };
+  }
 
   if (!hasEntries) {
     return (
@@ -55,7 +69,7 @@ const PortalPageContent = async () => {
 
       {/* Featured Entry - Large Section */}
       <section className="min-h-[50vh]">
-        <FeaturedEntryCard entry={featuredEntry} />
+        <FeaturedEntryCard entry={featuredEntry} stats={featuredEntryStats} />
       </section>
 
       {/* Two Column Layout */}
@@ -84,7 +98,7 @@ const PortalPageContent = async () => {
   );
 };
 
-const FeaturedEntryCard = ({ entry }: { entry: Deceased }) => {
+const FeaturedEntryCard = ({ entry, stats }: { entry: Deceased; stats: { obituariesCount: number; imagesCount: number } | null }) => {
   return (
     <Card className="border-0 shadow-none">
       <div className="grid md:grid-cols-2 min-h-[50vh]">
@@ -133,6 +147,32 @@ const FeaturedEntryCard = ({ entry }: { entry: Deceased }) => {
                 years
               </span>
             </div>
+            
+            {/* Generated Content Stats */}
+            {stats && (
+              <>
+                <div className="h-px bg-border my-4" />
+                <div className="space-y-1">
+                  <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-2">
+                    Generated Content
+                  </p>
+                  <div className="flex items-center gap-4">
+                    <span className="font-medium">Obituaries:</span>
+                    <span className="flex items-center gap-1">
+                      <Icon icon="mdi:file-document-outline" className="w-4 h-4" />
+                      {stats.obituariesCount}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <span className="font-medium">Memorial Images:</span>
+                    <span className="flex items-center gap-1">
+                      <Icon icon="mdi:image-multiple-outline" className="w-4 h-4" />
+                      {stats.imagesCount}
+                    </span>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
           <div className="flex-shrink-0 flex flex-col gap-2 pr-4">
             <ActionButtons deleteDeceased={deleteDeceased} entry={entry} />
@@ -281,14 +321,15 @@ export const ActionButtons = ({
           <Icon icon="mdi:pencil-outline" className="w-4 h-4" /> Edit
         </Button>
       </Link>
-      <Button
+      <ActionButton
         variant="destructive"
         size="sm"
         className="flex items-center gap-2"
-        onClick={deleteDeceased.bind(null, entry.id)}
+        action={deleteDeceased.bind(null, entry.id)}
+        requireAreYouSure
       >
         <Icon icon="mdi:delete-outline" className="w-4 h-4" /> Delete
-      </Button>
+      </ActionButton>
     </div>
   );
 };
