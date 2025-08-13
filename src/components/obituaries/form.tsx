@@ -371,6 +371,40 @@ export function ObituaryGeneratorForm({
     });
   };
 
+  const toneOptions = [
+    {
+      value: "reverent",
+      label: "Reverent",
+      description: "Respectful and deeply honoring (default)",
+    },
+    { value: "somber", label: "Somber", description: "Serious and reflective" },
+    {
+      value: "uplifting",
+      label: "Uplifting",
+      description: "Positive and celebratory",
+    },
+    {
+      value: "humorous",
+      label: "Humorous",
+      description: "Light-hearted with gentle humor",
+    },
+    {
+      value: "formal",
+      label: "Formal",
+      description: "Traditional and dignified",
+    },
+    {
+      value: "personal",
+      label: "Personal",
+      description: "Intimate and heartfelt",
+    },
+    {
+      value: "inspiring",
+      label: "Inspiring",
+      description: "Motivational and encouraging",
+    },
+  ];
+
   return (
     <div className="flex flex-col lg:flex-row items-stretch gap-4 relative">
       <section className="flex-2 lg:sticky lg:top-0 mt-4">
@@ -496,7 +530,7 @@ export function ObituaryGeneratorForm({
                 {formData.survivedBy.map((member: FamilyMember) => (
                   <div
                     key={member.id}
-                    className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border rounded-lg"
+                    className="flex flex-col lg:flex-row items-center justify-between gap-4 p-4 border rounded-lg"
                   >
                     <Input
                       name="name"
@@ -540,6 +574,7 @@ export function ObituaryGeneratorForm({
                     <Button
                       type="button"
                       variant="outline"
+                      className="w-full lg:w-fit"
                       onClick={() =>
                         removeFamilyMember("survivedBy", member.id)
                       }
@@ -567,7 +602,7 @@ export function ObituaryGeneratorForm({
                 {formData.predeceasedBy.map((member: FamilyMember) => (
                   <div
                     key={member.id}
-                    className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border rounded-lg"
+                    className="flex flex-col lg:flex-row items-center justify-between gap-4 p-4 border rounded-lg"
                   >
                     <Input
                       name="name"
@@ -611,7 +646,7 @@ export function ObituaryGeneratorForm({
                     <Button
                       type="button"
                       variant="outline"
-                      size="sm"
+                      className="w-full lg:w-fit"
                       onClick={() =>
                         removeFamilyMember("predeceasedBy", member.id)
                       }
@@ -643,33 +678,24 @@ export function ObituaryGeneratorForm({
                   onValueChange={(value) => handleInputChange("tone", value)}
                   className="flex flex-row gap-4 mt-4"
                 >
-                  <section className="space-y-3 flex-1 [&>div]:gap-4">
-                    <div className="flex items-center">
-                      <RadioGroupItem value="reverant" id="reverant" />
-                      <Label htmlFor="reverant">Reverant</Label>
-                    </div>
-                    <div className="flex items-center">
-                      <RadioGroupItem value="funeral" id="funeral" />
-                      <Label htmlFor="funeral">Funeral</Label>
-                    </div>
-                    <div className="flex items-center">
-                      <RadioGroupItem value="informal" id="informal" />
-                      <Label htmlFor="informal">Informal</Label>
-                    </div>
-                  </section>
-                  <section className="space-y-3 flex-1 [&>div]:gap-4">
-                    <div className="flex items-center">
-                      <RadioGroupItem value="humorous" id="humorous" />
-                      <Label htmlFor="humorous">Humorous</Label>
-                    </div>
-                    <div className="flex items-center">
-                      <RadioGroupItem value="uplifting" id="uplifting" />
-                      <Label htmlFor="uplifting">Uplifting</Label>
-                    </div>
-                    <div className="flex items-center">
-                      <RadioGroupItem value="poetic" id="poetic" />
-                      <Label htmlFor="poetic">Poetic</Label>
-                    </div>
+                  <section className="space-y-3 flex-1 [&>div]:gap-4 [&>div_label]:mt-0.75">
+                    {toneOptions.map((option) => (
+                      <div className="flex items-center" key={option.value}>
+                        <RadioGroupItem
+                          value={option.value}
+                          id={option.value}
+                        />
+                        <Label
+                          htmlFor={option.value}
+                          className="items-baseline"
+                        >
+                          {option.label}
+                          <span className="text-xs font-normal text-muted-foreground">
+                            {option.description}
+                          </span>
+                        </Label>
+                      </div>
+                    ))}
                   </section>
                 </RadioGroup>
               </div>

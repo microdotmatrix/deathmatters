@@ -5,7 +5,7 @@ import { db } from "@/lib/db"; // Your Drizzle DB instance
 import { obituaries, obituariesDraft } from "@/lib/db/schema"; // Your Drizzle schema for obituaries
 import { anthropic } from "@ai-sdk/anthropic";
 import { openai } from "@ai-sdk/openai";
-import { streamText } from "ai";
+import { smoothStream, streamText } from "ai";
 import { createStreamableValue } from "ai/rsc";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
@@ -245,6 +245,7 @@ export async function generateClaudeObituary(
         messages: [{ role: "user", content: prompt }],
         temperature: 0.7,
         maxTokens: 1000,
+        experimental_transform: smoothStream({ chunking: "word" }),
         onFinish: ({
           usage,
         }: {
@@ -315,6 +316,7 @@ export async function generateOpenAIObituary(
         messages: [{ role: "user", content: prompt }],
         temperature: 0.7,
         maxTokens: 1000,
+        experimental_transform: smoothStream({ chunking: "word" }),
         onFinish: ({
           usage,
         }: {

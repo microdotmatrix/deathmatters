@@ -27,9 +27,9 @@ export const meta: Meta = {
     tablet: 1024,
     desktop: 1280,
   },
-  title: "DeathMatters",
-  description: "DeathMatters",
+  title: "Death Matters",
+  description: "Death Matters",
   keywords: ["DeathMatters", "Death", "Matters"],
   author: "MicrodotMatrix",
-  url: "https://github.com/microdotmatrix/deathmatters",
+  url: "https://deathmatterstools.com",
 };

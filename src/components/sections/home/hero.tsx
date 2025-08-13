@@ -20,10 +20,10 @@ export const HeroSection = () => {
     >
       <Image
         src="/images/fs-img_02.jpg"
-        alt="FinalSpaces"
+        alt="Death Matter"
         fill
         className={cn(
-          "object-cover z-[-1] mask-b-from-25% mask-b-to-90% opacity-75 transition-all duration-1000 delay-200 ease-out",
+          "object-cover object-left z-[-1] mask-b-from-25% mask-b-to-90% opacity-75 transition-all duration-1000 delay-200 ease-out",
           loaded ? "blur-none scale-100" : "blur-xl opacity-0 scale-110"
         )}
         onLoad={() => setLoaded(true)}
@@ -48,7 +48,7 @@ export const HeroSection = () => {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.5 }}
         >
-          DeathMatters
+          Death Matter
         </motion.h1>
       </div>
 
@@ -59,10 +59,10 @@ export const HeroSection = () => {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.5 }}
         >
-          DeathMatters combines compassion, experience in the grieving process,
+          Death Matter combines compassion, experience in the grieving process,
           and advanced technology to help people prepare and work through the
           administrative burden that accompanies death in our current time. When
-          you use DeathMatters tools, you transform a difficult experience into
+          you use Death Matter tools, you transform a difficult experience into
           one that's more manageable and meaningful.
         </motion.p>
 

@@ -17,12 +17,12 @@ export default function Privacy() {
         <div className="bg-card/50 backdrop-blur-sm rounded-xl p-6 md:p-8 shadow-lg border border-primary/10 mb-12">
           <h3 className="font-bold mb-6">1. INTRODUCTION</h3>
           <p className="text-base leading-relaxed mb-6">
-            Welcome to Death Matters LLC ("Company," "we," "our," or "us"). We
+            Welcome to Death Matter LLC ("Company," "we," "our," or "us"). We
             respect your privacy and are committed to protecting the personal
             information you share with us. This Privacy Policy explains how we
             collect, use, disclose, and safeguard your information when you
-            visit our website deathmatters.com (the "Site") or use our memorial
-            and obituary services.
+            visit our website deathmattertools.com (the "Site") or use our
+            memorial and obituary services.
           </p>
           <p className="text-base leading-relaxed">
             PLEASE READ THIS PRIVACY POLICY CAREFULLY. By accessing or using our

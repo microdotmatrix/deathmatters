@@ -197,7 +197,7 @@
   --font-mono: var(--code-family);
 
   --font-display-weight: 400;
-  --font-text-weight: 400;
+  --font-text-weight: 300;
 
   --text-xs: clamp(0.65rem, -0.02vi + 0.65rem, 0.64rem);
   --text-sm: clamp(0.78rem, 0.03vi + 0.78rem, 0.8rem);

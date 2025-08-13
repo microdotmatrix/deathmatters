@@ -4,7 +4,7 @@ import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { getSession } from "@/lib/auth/server";
 import { meta } from "@/lib/config";
-import { mona_sans, pathway_extreme, space_mono } from "@/lib/fonts";
+import { font_display, font_mono, font_text } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
@@ -45,9 +45,9 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          pathway_extreme.variable,
-          mona_sans.variable,
-          space_mono.variable,
+          font_display.variable,
+          font_text.variable,
+          font_mono.variable,
           "antialiased"
         )}
       >

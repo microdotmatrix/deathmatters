@@ -27,6 +27,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         MAGIC_LINK: "magic-link",
         SETTINGS: "settings",
       }}
+      redirectTo="/dashboard"
       social={{
         providers: ["github", "google", "discord"],
       }}

@@ -5,7 +5,11 @@ import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { updateDeceased } from "@/lib/actions/user";
-import { getEntryById, getObituariesByDeceasedId, getGeneratedImagesByDeceasedId } from "@/lib/db/queries";
+import {
+  getEntryById,
+  getGeneratedImagesByDeceasedId,
+  getObituariesByDeceasedId,
+} from "@/lib/db/queries";
 import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
@@ -26,7 +30,7 @@ export default async function EntryEditPage({ params }: PageProps) {
 
   // Fetch obituaries for this deceased person
   const obituaries = await getObituariesByDeceasedId(entryId);
-  
+
   // Fetch generated images for this deceased person
   const generatedImages = await getGeneratedImagesByDeceasedId(entryId);
 
@@ -34,14 +38,26 @@ export default async function EntryEditPage({ params }: PageProps) {
     <main className="min-h-screen">
       <div className="container mx-auto px-4 py-6">
         <Suspense fallback="Loading...">
-          <EntryEditContent entry={entry} obituaries={obituaries} generatedImages={generatedImages} />
+          <EntryEditContent
+            entry={entry}
+            obituaries={obituaries}
+            generatedImages={generatedImages}
+          />
         </Suspense>
       </div>
     </main>
   );
 }
 
-const EntryEditContent = ({ entry, obituaries, generatedImages }: { entry: any; obituaries: any[]; generatedImages: any[] }) => {
+const EntryEditContent = ({
+  entry,
+  obituaries,
+  generatedImages,
+}: {
+  entry: any;
+  obituaries: any[];
+  generatedImages: any[];
+}) => {
   const handleSubmit = async (formData: FormData) => {
     "use server";
     const result = await updateDeceased({}, formData);
@@ -192,7 +208,10 @@ const EntryEditContent = ({ entry, obituaries, generatedImages }: { entry: any; 
                                 {obituary.fullName}
                               </h4>
                               <p className="text-xs text-muted-foreground">
-                                {format(new Date(obituary.createdAt), "MMM d, yyyy")}
+                                {format(
+                                  new Date(obituary.createdAt),
+                                  "MMM d, yyyy"
+                                )}
                               </p>
                               <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
                                 {obituary.generatedText.substring(0, 100)}...
@@ -262,15 +281,26 @@ const EntryEditContent = ({ entry, obituaries, generatedImages }: { entry: any; 
                   <>
                     <div className="space-y-2">
                       {generatedImages.slice(0, 3).map((image) => (
-                        <div key={image.id} className="flex items-center justify-between p-2 border rounded-lg">
+                        <div
+                          key={image.id}
+                          className="flex items-center justify-between p-2 border rounded-lg"
+                        >
                           <div className="flex items-center gap-3">
                             <div className="w-12 h-12 bg-gray-100 rounded-md flex items-center justify-center">
-                              <Icon icon="mdi:image" className="w-6 h-6 text-gray-400" />
+                              <Icon
+                                icon="mdi:image"
+                                className="w-6 h-6 text-gray-400"
+                              />
                             </div>
                             <div>
-                              <p className="text-sm font-medium">Memorial Image #{image.epitaphId}</p>
+                              <p className="text-sm font-medium">
+                                Memorial Image #{image.epitaphId}
+                              </p>
                               <p className="text-xs text-muted-foreground">
-                                {format(new Date(image.createdAt), "MMM d, yyyy")}
+                                {format(
+                                  new Date(image.createdAt),
+                                  "MMM d, yyyy"
+                                )}
                               </p>
                             </div>
                           </div>

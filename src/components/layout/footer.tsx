@@ -58,7 +58,7 @@ export const Footer = () => {
               </p>
               <p className="flex items-center gap-1 mt-12">
                 <Icon icon="mdi:copyright" className="-mt-0.5" />{" "}
-                <span className="font-semibold">2025 FinalSpaces.</span> All
+                <span className="font-semibold">2025 DeathMatters.</span> All
                 rights reserved.
               </p>
             </div>

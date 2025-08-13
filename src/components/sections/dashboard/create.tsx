@@ -22,7 +22,10 @@ export const CreatePortal = () => {
           Create New <Icon icon="mdi:plus" className="-mt-0.5" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent
+        className="sm:max-w-lg"
+        onPointerDownOutside={(e) => e.preventDefault()}
+      >
         <DialogHeader className="mb-4">
           <DialogTitle>Create New Entry</DialogTitle>
           <DialogDescription>

@@ -15,11 +15,11 @@ export default function TermsPage() {
         <div className="bg-card/50 backdrop-blur-sm rounded-xl p-6 md:p-8 shadow-lg border border-primary/10 mb-12">
           <h3 className="font-bold mb-6">1. ACCEPTANCE OF TERMS</h3>
           <p className="text-base leading-relaxed mb-6">
-            Welcome to DeathMatters LLC ("Company," "we," "our," or "us"). These
-            Terms of Service ("Terms") govern your access to and use of
-            deathmatters.com (the "Site") and any related services, features,
-            content, or applications offered by DeathMatters LLC (collectively,
-            the "Services").
+            Welcome to Death Matter LLC ("Company," "we," "our," or "us"). These
+            Terms of Service ("Terms") govern your access to and use of Death
+            Matter.com (the "Site") and any related services, features, content,
+            or applications offered by Death Matter LLC (collectively, the
+            "Services").
           </p>
           <p className="text-base leading-relaxed">
             PLEASE READ THESE TERMS CAREFULLY BEFORE USING OUR SERVICES. By
@@ -251,7 +251,7 @@ export default function TermsPage() {
             7. INDEMNIFICATION
           </h2>
           <p className="text-base leading-relaxed">
-            You agree to defend, indemnify, and hold harmless DeathMatters LLC,
+            You agree to defend, indemnify, and hold harmless Death Matter LLC,
             its officers, directors, employees, and agents, from and against any
             and all claims, damages, obligations, losses, liabilities, costs or
             debt, and expenses (including but not limited to attorney's fees)

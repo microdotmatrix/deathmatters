@@ -44,7 +44,7 @@ export const ObituarySection = () => {
           <Card className="bg-card/50 backdrop-blur-sm border-none shadow-lg">
             <CardContent>
               <p className="text-base leading-relaxed text-pretty">
-                FinalSpaces helps funeral homes and individuals research the
+                Death Matter helps funeral homes and individuals research the
                 deceased, draft thoughtful obituaries based on personal
                 characteristics, and facilitates a collaborative, human-centered
                 approach. Our technology eases the emotional burden of preparing

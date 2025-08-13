@@ -1,16 +1,20 @@
-import { Mona_Sans, Pathway_Extreme, Space_Mono } from "next/font/google";
+import {
+  Pathway_Extreme as FontDisplay,
+  Space_Mono as FontMono,
+  Montserrat as FontText,
+} from "next/font/google";
 
-export const pathway_extreme = Pathway_Extreme({
+export const font_display = FontDisplay({
   subsets: ["latin"],
   variable: "--display-family",
 });
 
-export const mona_sans = Mona_Sans({
+export const font_text = FontText({
   subsets: ["latin"],
   variable: "--text-family",
 });
 
-export const space_mono = Space_Mono({
+export const font_mono = FontMono({
   subsets: ["latin"],
   weight: ["400"],
   variable: "--code-family",

@@ -1,11 +1,16 @@
 import { ActionButton } from "@/components/elements/action-button";
 import { CreatePortal } from "@/components/sections/dashboard/create";
 import { CreateForm } from "@/components/sections/dashboard/form";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
 import { deleteDeceased } from "@/lib/actions/user";
-import { getCreatorEntries, getUserUploads, getObituariesByDeceasedId, getGeneratedImagesByDeceasedId } from "@/lib/db/queries";
+import {
+  getCreatorEntries,
+  getGeneratedImagesByDeceasedId,
+  getObituariesByDeceasedId,
+  getUserUploads,
+} from "@/lib/db/queries";
 import type { Deceased } from "@/lib/db/schema";
 import { differenceInYears, format } from "date-fns";
 import Image from "next/image";
@@ -48,8 +53,11 @@ const PortalPageContent = async () => {
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-8">
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-4">Welcome to Your Portal</h1>
-          <p className="text-lg text-muted-foreground mb-8">
-            Create your first entry to get started
+          <p className="max-w-lg mx-auto text-muted-foreground mb-8">
+            To use Death Matter Tools, start by creating a profile for the
+            person you will be creating content for. Once you create an entry,
+            you can apply our tools to create obituaries, memorial images, and
+            more. Create your first entry to get started.
           </p>
         </div>
         <div className="w-full max-w-md">
@@ -98,7 +106,13 @@ const PortalPageContent = async () => {
   );
 };
 
-const FeaturedEntryCard = ({ entry, stats }: { entry: Deceased; stats: { obituariesCount: number; imagesCount: number } | null }) => {
+const FeaturedEntryCard = ({
+  entry,
+  stats,
+}: {
+  entry: Deceased;
+  stats: { obituariesCount: number; imagesCount: number } | null;
+}) => {
   return (
     <Card className="border-0 shadow-none">
       <div className="grid md:grid-cols-2 min-h-[50vh]">
@@ -147,7 +161,7 @@ const FeaturedEntryCard = ({ entry, stats }: { entry: Deceased; stats: { obituar
                 years
               </span>
             </div>
-            
+
             {/* Generated Content Stats */}
             {stats && (
               <>
@@ -159,14 +173,20 @@ const FeaturedEntryCard = ({ entry, stats }: { entry: Deceased; stats: { obituar
                   <div className="flex items-center gap-4">
                     <span className="font-medium">Obituaries:</span>
                     <span className="flex items-center gap-1">
-                      <Icon icon="mdi:file-document-outline" className="w-4 h-4" />
+                      <Icon
+                        icon="mdi:file-document-outline"
+                        className="w-4 h-4"
+                      />
                       {stats.obituariesCount}
                     </span>
                   </div>
                   <div className="flex items-center gap-4">
                     <span className="font-medium">Memorial Images:</span>
                     <span className="flex items-center gap-1">
-                      <Icon icon="mdi:image-multiple-outline" className="w-4 h-4" />
+                      <Icon
+                        icon="mdi:image-multiple-outline"
+                        className="w-4 h-4"
+                      />
                       {stats.imagesCount}
                     </span>
                   </div>
@@ -314,21 +334,47 @@ export const ActionButtons = ({
   deleteDeceased: (id: string) => void;
   entry: Deceased;
 }) => {
+  const deleteAction = deleteDeceased.bind(null, entry.id);
   return (
     <div className="flex gap-2">
-      <Link href={`/dashboard/${entry.id}`}>
-        <Button variant="outline" size="sm" className="flex items-center gap-2">
-          <Icon icon="mdi:pencil-outline" className="w-4 h-4" /> Edit
-        </Button>
+      <Link
+        href={`/dashboard/${entry.id}`}
+        className={buttonVariants({
+          variant: "outline",
+          size: "sm",
+          className: "flex items-center gap-2",
+        })}
+      >
+        <Icon icon="mdi:pencil-outline" className="size-4" /> Edit
+      </Link>
+      <Link
+        href={`/dashboard/${entry.id}/obituaries/new`}
+        className={buttonVariants({
+          variant: "outline",
+          size: "sm",
+          className: "flex items-center gap-2",
+        })}
+      >
+        <Icon icon="mdi:plus" className="size-4" /> New Obituary
+      </Link>
+      <Link
+        href={`/dashboard/${entry.id}/images/new`}
+        className={buttonVariants({
+          variant: "outline",
+          size: "sm",
+          className: "flex items-center gap-2",
+        })}
+      >
+        <Icon icon="mdi:image-outline" className="size-4" /> New Memorial Image
       </Link>
       <ActionButton
         variant="destructive"
         size="sm"
         className="flex items-center gap-2"
-        action={deleteDeceased.bind(null, entry.id)}
+        action={deleteAction}
         requireAreYouSure
       >
-        <Icon icon="mdi:delete-outline" className="w-4 h-4" /> Delete
+        <Icon icon="mdi:delete-outline" className="size-4" /> Delete
       </ActionButton>
     </div>
   );

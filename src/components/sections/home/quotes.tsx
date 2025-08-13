@@ -49,7 +49,7 @@ export const QuotesSection = () => {
             <CardContent>
               <p className="text-base leading-relaxed text-pretty">
                 Many people struggle to find the perfect words to encapsulate
-                their loved one's spirit and legacy. FinalSpaces analyzes the
+                their loved one's spirit and legacy. Death Matter analyzes the
                 individual's characteristics and life story to suggest
                 meaningful quotes that beautifully capture their essence and
                 memory, providing comfort during a challenging time.

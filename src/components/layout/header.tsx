@@ -70,7 +70,7 @@ export const Header = ({ user }: { user: any }) => {
             <span className="sr-only">Quotes</span>
           </Link>
         </nav>
-        <div className="flex items-center gap-2 ml-2 lg:ml-4">
+        <div className="flex items-center gap-2 ml-2 lg:ml-4 relative">
           {user ? (
             <div className="pl-2 relative">
               <UserButton
@@ -94,10 +94,10 @@ export const Header = ({ user }: { user: any }) => {
           ) : (
             <Link
               href="/auth/login"
-              className={buttonVariants({ variant: "ghost", size: "icon" })}
+              className={buttonVariants({ variant: "ghost", size: "lg" })}
             >
               <Icon icon="ph:sign-in" className="size-6 md:size-8" />
-              <span className="sr-only">Login</span>
+              <span className="">Login</span>
             </Link>
           )}
           <ThemeToggle />
